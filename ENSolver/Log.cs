@@ -13,13 +13,18 @@ namespace ENSolver
     //
     public class Log
     {
+        // объекты блокировки
         private static object threadLockWrite = new object();
         private static object threadLockStore = new object();
 
-        private static string PathToPages = "";         // путь (без слеша в конце, к папке для сохраняемых страниц
-        private static System.IO.StreamWriter logfile;  // поток лога
-        public static bool isReady = false;             // инициализация проведена?
-        private static int fileidx = 1;                 // индекс/номер сохраняемого файла
+        // путь (без слеша в конце, к папке для сохраняемых страниц
+        private static string PathToPages = "";
+        // поток лог-файла, в него будет вестись дозапись лога
+        private static System.IO.StreamWriter logfile;
+        // прризнак проведенной инициализации
+        public static bool isReady = false;
+        // индекс (порядковый номер)  сохраняемого файла страниц (.http)
+        private static int fileidx = 1;
 
         /// <summary>
         /// записывает строку текста в лог-файл
