@@ -92,7 +92,7 @@ namespace ENSolver
         private static string CheckCreateFolder(string basepath, string folder)
         {
             string path = basepath + @"\" + folder;
-            if (System.IO.Directory.Exists(path) == false)
+            if (!System.IO.Directory.Exists(path))
             {
                 try
                 {

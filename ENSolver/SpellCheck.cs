@@ -43,7 +43,7 @@ namespace ENSolver
         public SpellCheck()
         {
             //инициализация одного объекта, если ранее не инициализировали
-            if (isObjectReady == true)
+            if (isObjectReady)
             {
                 WordApp = new Microsoft.Office.Interop.Word.Application();
                 Log.Write("SpellCheck: Создание нового объекта спелчекера");
@@ -62,16 +62,15 @@ namespace ENSolver
         }
 
 
-
         /// <summary>
         /// инициализация объектов
         /// </summary>
         public static void Init()
         {
             Log.Write("SpellCheck: Инициализация объекта SpellChecker");
-            if (isObjectReady == false)
+            if (!isObjectReady)
             {
-                if (CheckMsWord() == true)
+                if (CheckMsWord())
                 {
                     dict1 = new List<string>();
                     dict2 = new List<string>();
@@ -83,7 +82,7 @@ namespace ENSolver
         /// <summary>
         /// чтение словаря с диска
         /// </summary>
-        /// <param name="DictPath">имя файла словаря</param>
+        /// <param name="DictPath2">имя файла словаря</param>
         public static void LoadDictionary(string DictPath2 = "")
         {
             // 
@@ -92,12 +91,12 @@ namespace ENSolver
             string DictPath = System.Environment.CurrentDirectory + "\\Data\\" + DictName;
 
             Log.Write("SpellCheck: Чтение внешнего словаря начато");
-            if (isObjectReady == false) { return; }
+            if (!isObjectReady) { return; }
             // если словарь не загружен
-            if (isDicionaryLoaded == false)
+            if (!isDicionaryLoaded)
             {
                 // проверить путь на валидность
-                if (System.IO.File.Exists(DictPath) == true)
+                if (System.IO.File.Exists(DictPath))
                 {
                     string[] dict; // временный массив
                     dict = System.IO.File.ReadAllLines(DictPath);
@@ -123,7 +122,7 @@ namespace ENSolver
         public static void SaveDictionary()
         {
             Log.Write("SpellCheck: Запись в файл словаря для Spellchecker'а начата");
-            if (isObjectReady == false) { return; }
+            if (!isObjectReady) { return; }
             // объединяем два словаря (без пустых строк) и сохраняем в файл DictionaryPath
             List<string> dict_out = new List<string>();
             dict_out.AddRange(dict1);
@@ -181,7 +180,7 @@ namespace ENSolver
         {
             //результат
             List<string> res = new List<string>();
-            if (isObjectReady == false) { return res; }
+            if (!isObjectReady) { return res; }
 
             if (InnerWordList.Count <= maxCntWords)
             {
@@ -232,7 +231,7 @@ namespace ENSolver
         {
             //результат
             List<string> res = new List<string>();
-            if (isObjectReady == false) { return res; }
+            if (!isObjectReady) { return res; }
 
             // для всех слов, если их меньше тысячи
             foreach (string SingleWord in InnerWordList)
@@ -250,7 +249,7 @@ namespace ENSolver
         /// <returns>результат проверки</returns>
         public bool Check(string SingleWord)
         {
-            if (isObjectReady == false) { return false; }
+            if (!isObjectReady) { return false; }
             // нормализуем входящее слово
             string NormalWord = SingleWord.ToLower().Trim();
             // отсекаем пустые слова
@@ -279,15 +278,9 @@ namespace ENSolver
         /// <returns>ответ</returns>
         public bool CheckOne(string SingleWord)
         {
-            if (isObjectReady == false)
-            {
-                return false;
-            }
+            if (!isObjectReady) { return false; }
             // отсекаем пустые слова
-            if (SingleWord == "")
-            {
-                return false;
-            }
+            if (SingleWord == "") { return false; }
             return WordApp.CheckSpelling(SingleWord);
         }
 
