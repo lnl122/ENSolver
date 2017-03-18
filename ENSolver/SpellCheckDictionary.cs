@@ -5,10 +5,12 @@ using System.Collections.Generic;
 
 namespace ENSolver
 {
+    /// <summary>
+    /// реализует работу с собственным орфографическим словарем 
+    /// </summary>
     interface ISpellCheckDictionary
     {
-        List<string> GetDict1();
-        List<string> GetDict2();
+        bool Check(string wrd);
         void Add(string wrd);
         void Save();
     }
@@ -19,54 +21,60 @@ namespace ENSolver
         private const int NewWords = 10;
 
         // лог
-        private static Log Log = new Log();
+        private static Log Log = new Log("SpellCheckDict");
         // объекты для блокировки
-        private static object ObjLockInit = new object();
-        private static object ObjLockSave = new object();
-        // словари - загружаемый и создающийся в процессе работы
-        private static List<string> dict1 = new List<string>();
-        private static List<string> dict2 = new List<string>();
+        private static object LockInit = new object();
+        private static object LockSave = new object();
+        // словарь
+        private static List<string> dict;
         // путь к словарю
         private static string DictionaryPath = "";
         // первое создание объекта уже было?
-        private static bool isObjectReady = false;
+        private static bool isReady = false;
 
         /// <summary>
         /// конструктор
         /// </summary>
         public SpellCheckDictionary()
         {
-            if (!isObjectReady)
+            Log.Write("Новый словарь орфографии");
+            if (!isReady)
             {
-                lock (ObjLockInit)
+                lock (LockInit)
                 {
-                    if (!isObjectReady)
+                    if (!isReady)
                     {
-                        Log.Write("SpellCheckDictionary: Чтение внешнего словаря начато");
-                        string DictionaryPath = GetDictPath();
+                        Log.Write("Чтение внешнего словаря начато");
+                        dict = new List<string>();
+                        string DictionaryPath = (new FilePath()).GetDictionary();
                         if (System.IO.File.Exists(DictionaryPath))
                         {
-                            string[] dict = System.IO.File.ReadAllLines(DictionaryPath);
-                            foreach (string s1 in dict)
+                            string[] filedict = System.IO.File.ReadAllLines(DictionaryPath);
+                            foreach (string s1 in filedict)
                             {
-                                dict1.Add(s1.ToLower());
+                                dict.Add(s1.ToLower());
                             }
-                            isObjectReady = true;
-                            Log.Write("SpellCheckDictionary: Чтение внешнего словаря завершено");
+                            isReady = true;
+                            Log.Write("Чтение внешнего словаря завершено");
                         }
                         else
                         {
-                            Log.Write("SpellCheckDictionary: ERROR: словаря по указанному пути нет", DictionaryPath);
+                            Log.Write("ERROR: словаря по указанному пути нет");
+                            Log.Write(DictionaryPath);
                         }
                     }
                 }
             }
         }
 
-        // временная заглушка. заменить на функцию получения пути и имени
-        public string GetDictPath()
+        /// <summary>
+        /// проверка вхождения слова в словарь
+        /// </summary>
+        /// <param name="wrd">проверяемое слово</param>
+        /// <returns>результат</returns>
+        public bool Check(string wrd)
         {
-            return System.Environment.CurrentDirectory + "\\Data\\SpChDict.dat";
+            return dict.Contains(wrd.ToLower());
         }
 
         /// <summary>
@@ -75,31 +83,11 @@ namespace ENSolver
         /// <param name="wrd">добавляемое слово</param>
         public void Add(string wrd)
         {
-            dict2.Add(wrd.ToLower());
-            if(dict2.Count % NewWords == 0)
+            dict.Add(wrd.ToLower());
+            if(dict.Count % NewWords == 0)
             {
                 Save();
             }
-        }
-
-        /// <summary>
-        /// возвращает первый словарь
-        /// </summary>
-        /// <returns>список слов первого словаря</returns>
-        public List<string> GetDict1()
-        {
-            //if (!isObjectReady) { return new List<string>(); }
-            return dict1;
-        }
-
-        /// <summary>
-        /// возвращает второй словарь
-        /// </summary>
-        /// <returns>список слов второго словаря</returns>
-        public List<string> GetDict2()
-        {
-            //if (!isObjectReady) { return new List<string>(); }
-            return dict2;
         }
 
         /// <summary>
@@ -107,19 +95,15 @@ namespace ENSolver
         /// </summary>
         public void Save()
         {
-            lock (ObjLockSave)
+            lock (LockSave)
             {
-                Log.Write("SpellCheckDictionary: Запись в файл словаря для Spellchecker'а начата");
-                if (!isObjectReady) { return; }
-                // объединяем два словаря (без пустых строк) и сохраняем в файл DictionaryPath
-                List<string> dict_out = new List<string>();
-                dict_out.AddRange(dict1);
-                dict_out.AddRange(dict2);
+                Log.Write("Запись в файл словаря для Spellchecker'а начата");
+                if (!isReady) { return; }
                 if (DictionaryPath != "")
                 {
-                    System.IO.File.WriteAllLines(DictionaryPath, dict_out.ToArray());
+                    System.IO.File.WriteAllLines(DictionaryPath, dict.ToArray());
                 }
-                Log.Write("SpellCheckDictionary: Запись в файл словаря для Spellchecker'а завершена");
+                Log.Write("Запись в файл словаря для Spellchecker'а завершена");
             }
         }
 
