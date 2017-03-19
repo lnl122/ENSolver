@@ -11,8 +11,14 @@ namespace ENSolver
 
         static void Main(string[] args)
         {
-            SpellCheck SC = new SpellCheck();
-            SC.Close();
+            HosterIpicSu up = new HosterIpicSu();
+            string path = Environment.CurrentDirectory + @"\..\files\tulips.jpg";
+            string res = up.GetUrl(path);
+        }
+
+        static public int test2()
+        {
+            return 2;
         }
     }
 

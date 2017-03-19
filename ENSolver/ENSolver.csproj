@@ -49,6 +49,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellCheck.cs" />
     <Compile Include="SpellCheckDictionary.cs" />
+    <Compile Include="Upload.cs" />
+    <Compile Include="UploadMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

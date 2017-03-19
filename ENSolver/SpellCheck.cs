@@ -22,9 +22,9 @@ namespace ENSolver
     public class SpellCheck
     {
         // лог
-        private Log Log = new Log("SpellCheck");
+        private ILog Log = new Log("SpellCheck");
         // словарь
-        private SpellCheckDictionary Dictionary = new SpellCheckDictionary();
+        private ISpellCheckDictionary Dictionary = new SpellCheckDictionary();
         private const string teststring = "мама мыла раму";
         // первое создание объекта уже было?
         private bool isReady = false;

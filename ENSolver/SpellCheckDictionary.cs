@@ -21,7 +21,7 @@ namespace ENSolver
         private const int NewWords = 10;
 
         // лог
-        private static Log Log = new Log("SpellCheckDict");
+        private static ILog Log = new Log("SpellCheckDict");
         // объекты для блокировки
         private static object LockInit = new object();
         private static object LockSave = new object();

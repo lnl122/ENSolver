@@ -91,7 +91,7 @@ namespace ENSolver
                 {
                     fileidx++;
                     var dn = DateTime.Now;
-                    string path = PathToPages + ModuleName + "_" + LeadZero(fileidx) + "_" +
+                    string path = PathToPages + ModuleName.Replace(": ","") + "_" + LeadZero(fileidx) + "_" +
                         LeadZero(dn.Year) + LeadZero(dn.Month) + LeadZero(dn.Day) +
                         LeadZero(dn.Hour) + LeadZero(dn.Minute) + LeadZero(dn.Second) + ".http";
                     System.IO.File.WriteAllText(path, text, System.Text.Encoding.UTF8);
