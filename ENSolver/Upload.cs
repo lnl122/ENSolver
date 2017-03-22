@@ -14,9 +14,10 @@ namespace ENSolver
     interface IUpload
     {
         string GetUrl(string path);
+        List<string> GetUrls(List<string> path);
     }
 
-    class Upload : IUpload
+    public class Upload : IUpload
     {
         // лог
         private static ILog Log = new Log("Upload");
@@ -37,8 +38,16 @@ namespace ENSolver
             Log.Write("Новый объект");
             // добавляем в список все наши методы
             hosters = new List<IUploadHoster>();
-            hosters.Add(new HosterPixicRu());
+            //hosters.Add(new HosterPixicRu()); // - перестал работать в Казахстане
             hosters.Add(new HosterIpicSu());
+            hosters.Add(new HosterIi4Ru());
+            //hosters.Add(new HosterJpegshareNet()); // - иногда возникают ошибки EnsureSuccessStatusCode();
+            hosters.Add(new HosterPixshockNet());
+            hosters.Add(new HosterSaveimgRu());
+            hosters.Add(new HosterSavepicRu());
+            hosters.Add(new HosterRadikalRu());
+            hosters.Add(new HosterFreeimagehostingNet());
+            //
             hosters_count = hosters.Count;
             // выбираем начальный метод
             hoster_index = 0;
@@ -52,6 +61,7 @@ namespace ENSolver
         /// <returns>линк на загруженный файл</returns>
         public string GetUrl(string path)
         {
+            if (!System.IO.File.Exists(path)) { return ""; }
             // первая попытка
             int attempts = 1;
             string res = Method.GetUrl(path);
@@ -60,13 +70,28 @@ namespace ENSolver
             {
                 lock (LockChangeMethod)
                 {
-                    hoster_index = hoster_index % hosters_count;
+                    hoster_index = (++hoster_index) % hosters_count;
                     Method = hosters[hoster_index];
                 }
                 attempts++;
                 res = Method.GetUrl(path);
             }
             if (!isCorrectUrl(res)) { res = ""; }
+            return res;
+        }
+
+        /// <summary>
+        /// получает ссылки загруженных картинок по списку путей к файлам с ними
+        /// </summary>
+        /// <param name="paths">список путей файлов изображений</param>
+        /// <returns>список урл-ов</returns>
+        public List<string> GetUrls(List<string> paths)
+        {
+            List<string> res = new List<string>();
+            foreach(string p in paths)
+            {
+                res.Add(GetUrl(p));
+            }
             return res;
         }
 

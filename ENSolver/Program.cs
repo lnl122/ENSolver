@@ -11,9 +11,10 @@ namespace ENSolver
 
         static void Main(string[] args)
         {
-            HosterIpicSu up = new HosterIpicSu();
+            HosterSimplestImageHostingNet up = new HosterSimplestImageHostingNet();
             string path = Environment.CurrentDirectory + @"\..\files\tulips.jpg";
             string res = up.GetUrl(path);
+            int i = 0;
         }
 
         static public int test2()

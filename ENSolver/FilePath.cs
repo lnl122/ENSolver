@@ -15,7 +15,6 @@ namespace ENSolver
         string GetPics();
         string GetDictionary();
         string GetAssoc();
-        string GetAssocBad();
         string GetBooks();
     }
 
@@ -28,7 +27,6 @@ namespace ENSolver
         private const string PicsFolderName = "Pics";
         private const string SpellChekDictFile = "SpChDict.dat";
         private const string AssocDictFile = "AssocDict.dat";
-        private const string AssocBadDictFile = "AssocDictBad.dat";
         private const string BooksDictFile = "Books.dat";
         // готовность
         private static bool isReady = false;
@@ -40,7 +38,6 @@ namespace ENSolver
         private static string Log;
         private static string SpellChekDict;
         private static string AssocDict;
-        private static string AssocBadDict;
         private static string BooksDict;
 
         /// <summary>
@@ -67,7 +64,6 @@ namespace ENSolver
                         Log = CheckCreateFolder(LogFolderName) + System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName + ".log";
                         string DataFolder = CheckCreateFolder(DataFolderName);
                         SpellChekDict = DataFolder + SpellChekDictFile;
-                        AssocBadDict = DataFolder + AssocBadDictFile;
                         AssocDict = DataFolder + AssocDictFile;
                         BooksDict = DataFolder + BooksDictFile;
                         isReady = true;
@@ -130,11 +126,6 @@ namespace ENSolver
         {
             //if (!isReady) { Init(); }
             return AssocDict;
-        }
-        public string GetAssocBad()
-        {
-            //if (!isReady) { Init(); }
-            return AssocBadDict;
         }
 
     }
