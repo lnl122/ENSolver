@@ -18,7 +18,7 @@ namespace ENSolver
         string GetUrl(string path);
     }
 
-    /// <summary>
+    /*
     /// хостинг -                       * реаизован, или причина не реализации
     /// http://ipic.su/                 + реализован
     /// http://pixic.ru/                ? перестал работать в Казахстане
@@ -76,7 +76,7 @@ namespace ENSolver
     /// http://theimghost.com/          - умер
     /// http://uaimage.com/             - умер
     /// http://uploadingit.compublic/   - умер
-    /// </summary>
+    */
 
     // simplest-image-hosting.net
     public class HosterSimplestImageHostingNet : IUploadHoster

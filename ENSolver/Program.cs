@@ -11,9 +11,8 @@ namespace ENSolver
 
         static void Main(string[] args)
         {
-            HosterSimplestImageHostingNet up = new HosterSimplestImageHostingNet();
-            string path = Environment.CurrentDirectory + @"\..\files\tulips.jpg";
-            string res = up.GetUrl(path);
+            Google goo = new Google();
+            string res = goo.GetPageByImageUrl("http://www.obnovi.com/uploads/posts/2011-12/thumbs/1322828778_1.jpg");
             int i = 0;
         }
 
