@@ -35,8 +35,7 @@ namespace UnitTestENSolver
             Assert.AreEqual("http://img.ii4.ru/images", res.Substring(0, 24));
             Assert.AreEqual(".jpg", res.Substring(res.Length - 4));
         }
-        /*
-        [TestMethod]
+        //[TestMethod]
         public void Upload_JpegshareNet()
         {
             HosterJpegshareNet up = new HosterJpegshareNet();
@@ -45,7 +44,6 @@ namespace UnitTestENSolver
             Assert.AreEqual("http://jpegshare.net/images", res.Substring(0, 27));
             Assert.AreEqual(".jpg", res.Substring(res.Length - 4));
         }
-        */
         [TestMethod]
         public void Upload_PixshockNet()
         {
@@ -92,8 +90,7 @@ namespace UnitTestENSolver
             Assert.AreEqual("http://", res.Substring(0, 7));
             Assert.AreEqual(".jpg", res.Substring(res.Length - 4));
         }
-        /*
-        [TestMethod]
+        //[TestMethod]
         public void Upload_PixicRu()
         {
             HosterPixicRu up = new HosterPixicRu();
@@ -101,7 +98,6 @@ namespace UnitTestENSolver
             string res = up.GetUrl(path);
             Assert.AreEqual(path, res);
         }
-        */
 
     }
 }

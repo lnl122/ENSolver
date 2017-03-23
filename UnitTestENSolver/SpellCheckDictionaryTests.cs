@@ -5,7 +5,7 @@ using ENSolver;
 
 namespace UnitTestENSolver
 {
-    [TestClass]
+    //[TestClass]
     public class SpellCheckDictionaryTests
     {
         [TestMethod]

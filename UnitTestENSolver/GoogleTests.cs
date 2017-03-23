@@ -5,12 +5,12 @@ using ENSolver;
 
 namespace UnitTestENSolver
 {
-    [TestClass]
+    //[TestClass]
     public class GoogleTests
     {
         private static string[,] tags_script = { { "<script>"  , "<noscript>"  }, { "</script>", "</noscript>" } };
         private static string[] bad_tag = { "<script>"  , "<noscript>" };
-
+        
         [TestMethod]
         public void ParsePage_ParseTags_2()
         {

@@ -49,5 +49,19 @@ namespace ENSolver
 
         private UserInfo userinfo = new UserInfo("", "");
 
+        public bool Logon(UserInfo userinfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<string> GetGameList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public GameInfo GetGameInfo(string domain, string gamenumber)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

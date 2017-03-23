@@ -4,10 +4,9 @@ using ENSolver;
 
 namespace UnitTestENSolver
 {
-    [TestClass]
+    //[TestClass]
     public class LogTests
     {
-        
         [TestMethod]
         public void Log_Exists()
         {
