@@ -11,6 +11,7 @@ namespace ENSolver
 
         static void Main(string[] args)
         {
+            /*
             Log log = new ENSolver.Log("Main");
             DateTime dt = DateTime.Now;
             string folder = @"C:\Users\Антон\Source\Repos\Solver2\Solver2\Solver2\bin\Debug\Pics";
@@ -21,7 +22,7 @@ namespace ENSolver
                 string re = goo.GetWordsByImgFile(q);
             }
             log.Write("Main time for 163 pics: " + (Math.Floor((DateTime.Now - dt).TotalMilliseconds) / 1000).ToString());
-
+            */
 
             //Google goo = new Google();
             //string res1 = goo.GetPageByImageUrl("http://www.obnovi.com/uploads/posts/2011-12/thumbs/1322828778_1.jpg"); // чебурашка

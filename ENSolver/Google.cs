@@ -38,7 +38,7 @@ namespace ENSolver
 
         private static string[,] tags_script = {
             { "<script>" , "<noscript>" , "<style>" , "//<![CDATA[", "<kno-share-button>"  },
-            { "</script>", "</noscript>", "</style>", "//]]>"      , "</kno-share-button>"  }
+            { "</script>", "</noscript>", "</style>", "//]]>"      , "</kno-share-button>" }
         };
         private static string[,] tags_2 = {
             { "<svg"  , "<g-img"  , "<cite"  , ">{"     , "<g-section-with-header>" , "<g-text-field"  , "<g-menu"  , "<g-dropdown-menu"  , "<g-popup"  ,  "<g-dialog"  , "<image-viewer-group>" },

@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooksDictionary.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="FilePath.cs" />
     <Compile Include="Google.cs" />
     <Compile Include="Log.cs" />
