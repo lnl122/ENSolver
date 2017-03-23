@@ -28,9 +28,9 @@ namespace ENSolver
         // пути
         private static string googleRU = "https://www.google.ru/searchbyimage?&hl=ru-ru&lr=lang_ru&image_url=";
         // максимальное количество попыток чтения
-        private static int MaxTryToReadPage = 3;
+        private static int MaxTryToReadPage = 5;
         // на сколько миллисекунд засыпать при неудачном одном чтении
-        private static int TimeToSleepMs = 1000;
+        private static int TimeToSleepMs = 2000;
         // UserAgent
         private static string UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1";
         // Изображение слишком велико либо его нельзя загрузить из-за низкой скорости интернет-подключения.
@@ -49,16 +49,27 @@ namespace ENSolver
             { "\""  }
         };
         private static string[] bad_words_1 = {
-            "onmousedown", "value", "data_arrtid", "data_hveid", "data-jiis", "data-ved", "aria-label", "jsl", "data-jibp", "role", "jsaction", "onload", "alt", "title", "marginwidth", "marginheight", "width", "height", "data-deferred", "aria-haspopup", "aria-expanded", "<input", "tabindex", "tag", "aria-selected", "name", "type", "action", "method", "autocomplete", "aria-expanded", "aria-grabbed", "data-bucket", "aria-level", "aria-hidden", "aria-dropeffect", "topmargin" , "margin", "data-async-context", "valign", "data-async-context", "unselectable", "style" , "class" , "border" , "cellspacing" , "cellpadding" , "target" , "colspan" , "onclick" , "align" , "color" , "nowrap" , "vspace" , "href" , "src", "data-pid", "data-rtid", "data-hveid", "data-attrid", "data-md", "eid", "onsubmit", "id", "data-async-trigger", "data-async-", "-required", "data-du", "data-fi", "data-lhe", "data-lve", "data-oslg", "data-t", "data-d", "data-eca", "data-h", "data-m", "data-nr"
+            "onmousedown", "value", "data_arrtid", "data_hveid", "data-jiis", "data-ved", "aria-label", "jsl", "data-jibp", "role", "jsaction", "onload", "alt", "title",
+            "marginwidth", "marginheight", "width", "height", "data-deferred", "aria-haspopup", "aria-expanded", "<input", "tabindex", "tag", "aria-selected", "name", "type",
+            "action", "method", "autocomplete", "aria-expanded", "aria-grabbed", "data-bucket", "aria-level", "aria-hidden", "aria-dropeffect", "topmargin" , "margin",
+            "data-async-context", "valign", "data-async-context", "unselectable", "style" , "class" , "border" , "cellspacing" , "cellpadding" , "target" , "colspan" ,
+            "onclick" , "align" , "color" , "nowrap" , "vspace" , "href" , "src", "data-pid", "data-rtid", "data-hveid", "data-attrid", "data-md", "eid", "onsubmit", "id",
+            "data-async-trigger", "data-async-", "-required", "data-du", "data-fi", "data-lhe", "data-lve", "data-oslg", "data-t", "data-d", "data-eca", "data-h", "data-m", "data-nr"
         };
         private static string[] bad_tags_1 = {
-            "<div>", "<div >", "</div>", "<span >", "<span>", "</span>", "<a >", "<a>", "</a>", "<table>", "<table >", "</table>", "<tr>", "<tr >", "</tr>", "<td>", "<td >", "</td>", "<li>", "<li >", "</li>", "<ol>", "<ol >", "</ol>", "<h1>", "<h1 >", "</h1>", "<h2>", "<h2 >", "</h2>", "<h3>", "<h3 >", "</h3>", "<em>", "</em>", "&nbsp;", "&times;", "<!--n-->", "<!--m-->", "<!--z-->", "—"
+            "<div>", "<div >", "</div>", "<span >", "<span>", "</span>", "<a >", "<a>", "</a>", "<table>", "<table >", "</table>", "<tr>", "<tr >", "</tr>", "<td>", "<td >",
+            "</td>", "<li>", "<li >", "</li>", "<ol>", "<ol >", "</ol>", "<h1>", "<h1 >", "</h1>", "<h2>", "<h2 >", "</h2>", "<h3>", "<h3 >", "</h3>", "<em>", "</em>",
+            "&nbsp;", "&times;", "<!--n-->", "<!--m-->", "<!--z-->", "—"
         };
         private static string[] bad_words_2 = {
-            "результаты поиска", "сохраненная копия", "похожие", "страницы с подходящими изображениями", "смотреть онлайн", "сообщений", "оставить отзыв", "отправить отзыв", "подробнее справка", "подробнее", "конфиденциальность", "условия", "следующая", "<wbr>", "youtube", "facebook", "vkontakte"
-            , " янв. ", " фев. ", " мар. ", " апр. ", "май. ", " мая ", " июн. ", " июл. ", " авг. ", " сен. ", " окт. ", " ноя. ", " дек. ", " png ", " jpg ", " jpeg ", " svg ", " bmp ", " gif ", " avi ", " mp3 ", " mp4 ", " flv "
-            , " сайт ", " сайта ", "powered by wikia", "все серии подряд", " fandom ", " lurkmore ", " png ", " фото ", " оставить отзыв ", " youtu.be ", " youtube ", " youtu ", " http ", "перейти к разделу"
-            , " янв ", " фев ", " мар ", " апр ", " июн ", " июл ", " авг ", " сен ", " окт ", " ноя ", " дек ", " клипарт ", " мои альбомы ", " сент " , " блог ", " обои ", " скачать ", "для рабочего стола", " картинки ", " dot ", " просмотреть " 
+            "результаты поиска", "сохраненная копия", "похожие", "страницы с подходящими изображениями", "смотреть онлайн", "сообщений", "оставить отзыв", "отправить отзыв",
+            "подробнее справка", "подробнее", "конфиденциальность", "условия", "следующая", "<wbr>", "youtube", "facebook", "vkontakte"
+            , " янв. ", " фев. ", " мар. ", " апр. ", "май. ", " мая ", " июн. ", " июл. ", " авг. ", " сен. ", " окт. ", " ноя. ", " дек. ",
+            " png ", " jpg ", " jpeg ", " svg ", " bmp ", " gif ", " avi ", " mp3 ", " mp4 ", " flv "
+            , " сайт ", " сайта ", "powered by wikia", "все серии подряд", " fandom ", " lurkmore ", " png ", " фото ", " оставить отзыв ", " youtu.be ", " youtube ", " youtu ",
+            " http ", "перейти к разделу" , " янв ", " фев ", " мар ", " апр ", " июн ", " июл ", " авг ", " сен ", " окт ", " ноя ", " дек ", " клипарт ", " мои альбомы ",
+            " сент " , " блог ", " обои ", " скачать ", "для рабочего стола", " картинки ", " dot ", " просмотреть "
+            , " about "
         };
         private static string[] bad_words_3 = {
             "10 справка", "перевести эту страницу", " википедия ", " ещё ", " запросы ", " видео ", " февр ", "режим работы", " что ", " кто ", " где ", " был ", " для ", "риа новости",
@@ -79,9 +90,35 @@ namespace ENSolver
             " online ", " or ", " png ", " jpeg ", " главная ", " доставкой ", " изготовление ", " no ", " over ", " web ", " янв ", " фев ", " мар ", " апр ", " май ",
             " июн ", " июл ", " авг ", " сен ", " окт ", " ноя ", " дек ", " пн ", " вт ", " ср ", " чт ", " пт ", " сб ", " вс "
         };
+        private static string[] bad_words_4 = {
+            " года ", " родился ", " через ", " фильмы ", " родился ", " через ", " фильмы ", " соответствии ", " интернет ", " могли ", " некоторые ", " биография ", " году ",
+            " местным ", " удалены ", " этот ", " нояб ", " части ", " мин ", " фильмография ", " кинопоиск ", " название ", " премьера ", " такое ", " sub ", " англ ", " более ",
+            " которая ", " рисунок ", " about ", " fhm ", " panther ", " когда ", " самое ", " файл ", " фильмов ", " more ", " pikabu ", " start ", " аксессуары ", " другие ",
+            " информация ", " которые ", " который ", " логотип ", " моё ", " она ", " особенности ", " этом ", " было ", " даже ", " изображения ", " однако ", " основу ",
+            " откуда ", " после ", " последние ", " рейтинг ", " сериалы ", " are ", " edition ", " image ", " images ", " ipad ", " olx ", " select ", " trade ", " биографических ",
+            " всегда ", " жанре ", " значение ", " именно ", " картинка ", " которого ", " которое ", " мобильный ", " названы ", " народный ", " настоящее ", " начале ", " несколько ",
+            " определение ", " первая ", " первого ", " различия ", " различных ", " самой ", " себе ", " сколько ", " содержит ", " тем ", " чьи ", " buy ", " file ", " food ",
+            " home ", " information ", " iphone ", " java ", " loading ", " man ", " mpg ", " near ", " news ", " oil ", " page ", " see ", " shop ", " span ", " steam ", " stock ",
+            " today ", " was ", " your ", " бывшая ", " ваш ", " ведь ", " всего ", " выборе ", " главной ", " другое ", " игры ", " известен ", " изображение ", " имеет ", " креатив ",
+            " лучший ", " мне ", " мой ", " наш ", " ответы ", " первых ", " подробная ", " полезные ", " почти ", " предлагаем ", " предпросмотр ", " рублей ", " состоит ",
+            " специальные ", " такой ", " тот ", " часто ", " этого ", " connect ", " event ", " find ", " full ", " international ", " logo ", " mail ", " max ", " now ", " sale ",
+            " special ", " store ", " twitter ", " большая ", " будущего ", " виды ", " вполне ", " всем ", " говорить ", " данной ", " данный ", " дают ", " довольно ", " другим ",
+            " других ", " ежедневно ", " ему ", " используется ", " каждого ", " каждый ", " картинку ", " картинок ", " кинопоиске ", " компьютерная ", " красивая ", " лишь ",
+            " любой ", " между ", " меня ", " много ", " мужские ", " мужскую ", " называют ", " нам ", " начнется ", " наша ", " нашей ", " нашем ", " некоторых ", " обоев ",
+            " общественный ", " понимают ", " потому ", " почему ", " прежде ", " разных ", " сейчас ", " следующих ", " смотрите ", " совсем ", " содержание ", " состоялась ",
+            " средняя ", " станете ", " такие ", " там ", " твой ", " qualified ", " administration ", " all ", " app ", " around ", " automatic ", " boxnews ", " can ", " common ",
+            " dir ", " direction ", " drive ", " engine ", " events ", " files ", " finder ", " forums ", " foto ", " get ", " good ", " gsm ", " has ", " help ", " illustration ",
+            " info ", " into ", " itunes ", " market ", " mini ", " price ", " request ", " results ", " search ", " share ", " site ", " test ", " tool ", " views "
+        };
 
+        /// <summary>
+        /// получает гугл страницу поиска по картинке
+        /// </summary>
+        /// <param name="imgurl">урл изображения</param>
+        /// <returns>текст страницы</returns>
         public string GetPageByImageUrl(string imgurl)
         {
+            DateTime dt = DateTime.Now;
             string gurl = googleRU + imgurl;
             WebClient wc = new WebClient();
             
@@ -97,7 +134,26 @@ namespace ENSolver
                 try
                 {
                     page = wc.DownloadString(gurl);
-                    isNeedReadPage = false;
+                    if (page.IndexOf(LowSpeed) == -1)
+                    {
+                        isNeedReadPage = false;
+                    }
+                    else
+                    {
+                        CountTry++;
+                        if (CountTry == MaxTryToReadPage)
+                        {
+                            Log.Write("ERROR: не удалось получить страницу гугля для изображение по ссылке ");
+                            Log.Write(imgurl);
+                            Log.Store(page);
+                            page = "";
+                            isNeedReadPage = false;
+                        }
+                        else
+                        {
+                            System.Threading.Thread.Sleep(TimeToSleepMs);
+                        }
+                    }
                 }
                 catch
                 {
@@ -127,9 +183,15 @@ namespace ENSolver
 
             //page = ParsePage(page);
             Log.Store(page);
+            Log.Write("Dowload time: " + (Math.Floor((DateTime.Now - dt).TotalMilliseconds) / 1000).ToString());
             return page;
         }
 
+        /// <summary>
+        /// парсит страницу поиска гугля
+        /// </summary>
+        /// <param name="page">текст страницы</param>
+        /// <returns>найденные слова</returns>
         public string ParsePage(string page)
         {
             DateTime dt = DateTime.Now;
@@ -163,17 +225,25 @@ namespace ENSolver
             page = page.Replace("\"", " ").Replace("№", " ").Replace(";", " ").Replace(":", " ").Replace("?", " ").Replace("[", " ").Replace("]", " ").Replace("{", " ");
             page = page.Replace("}", " ").Replace("\\", " ").Replace("|", " ").Replace("'", " ").Replace(",", " ").Replace(".", " ").Replace("<", " ").Replace(">", " ");
             page = page.Replace("«", " ").Replace("»", " ").Replace("…", " ").Replace("‧", " ").Replace("/", " ");
-            
+            page = page.Replace("¡", " ").Replace("“", " ").Replace("”", " ");
+
             page = page.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             page = ENSolver.ParsePage.RemoveBadWords(page, bad_words_2);
-            page = page.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             page = ENSolver.ParsePage.RemoveBadWords(page, bad_words_3);
+            page = ENSolver.ParsePage.RemoveBadWords(page, bad_words_4);
             page = ENSolver.ParsePage.RemoveShortWords(page);
+            page = page.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             page = page.Trim();
             Log.Write("Parse time: "+(Math.Floor((DateTime.Now - dt).TotalMilliseconds)/1000).ToString());
+            Log.Store(page);
             return page;
         }
 
+        /// <summary>
+        /// получает слова с гугл страницы поиска по картинке, урл которой указан
+        /// </summary>
+        /// <param name="imgpath">путь к изображению</param>
+        /// <returns>слова строкой</returns>
         public string GetWordsByImgUrl(string imgurl)
         {
             string page = GetPageByImageUrl(imgurl);
@@ -182,6 +252,11 @@ namespace ENSolver
             return wrds;
         }
 
+        /// <summary>
+        /// получает слова с гугл страницы поиска по картинке, путь к которой указан
+        /// </summary>
+        /// <param name="imgpath">путь к изображению</param>
+        /// <returns>слова строкой</returns>
         public string GetWordsByImgFile(string imgpath)
         {
             Upload upl = new Upload();
