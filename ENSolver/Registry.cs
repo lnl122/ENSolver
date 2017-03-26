@@ -12,10 +12,10 @@ namespace ENSolver
     {
         string GetVersionDotNet();
         UserInfo GetUserInfo();
-        void SetRegistryUserPass(UserInfo ui);
+        void SetUserInfo(UserInfo ui);
     }
 
-    class Registry : IRegistry
+    public class Registry : IRegistry
     {
         //  лог
         private Log Log = new Log("Registry");
@@ -34,6 +34,31 @@ namespace ENSolver
         {
             if (!isReady)
             {
+                Init();
+                isReady = true;
+            }
+        }
+        /*
+        /// <summary>
+        /// инит ветки реестра, создание папок при необходимости, сохранение UserInfo
+        /// </summary>
+        public Registry(UserInfo ui)
+        {
+            if (!isReady)
+            {
+                Init();
+                isReady = true;
+            }
+            SetUserInfo(ui);
+        }
+        */
+        /// <summary>
+        /// создаем при необходимости ветки реестра для учетки юзера
+        /// </summary>
+        private void Init()
+        {
+            if (!isReady)
+            {
                 RegistryKey rk = Microsoft.Win32.Registry.CurrentUser;
                 RegistryKey rks = rk.OpenSubKey(HCKU_lev1, true); rk.Close();
                 RegistryKey rksl = rks.OpenSubKey(HCKU_lev2, true); if (rksl == null) { rksl = rks.CreateSubKey(HCKU_lev2); }
@@ -45,7 +70,6 @@ namespace ENSolver
                 var r_key_p = rksls.GetValue(Key_pass);
                 if (r_key_p == null) { rksls.SetValue(Key_pass, ""); }
                 rksls.Close();
-                isReady = true;
             }
         }
 
@@ -125,7 +149,7 @@ namespace ENSolver
         /// </summary>
         /// <param name="u">ник</param>
         /// <param name="p">пароль</param>
-        public void SetRegistryUserPass(UserInfo ui)
+        public void SetUserInfo(UserInfo ui)
         {
             RegistryKey rk2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(HCKU_lev1 + @"\" + HCKU_lev2 + @"\" + HCKU_lev3, true);
             rk2.SetValue(Key_user, ui.name);

@@ -18,10 +18,10 @@ namespace ENSolver
     interface IEngine
     {
         bool Logon(UserInfo user, string domain);
-        //string DoLogon(UserInfo user, string domain);
         List<GameInfo> GetGameList();
         void SetGame(GameInfo selected_game);
-        string GetPage(int level = -1);
+        string GetPage(string url);// походу он станет приватным
+        string GetLevelPage(int level = -1);
         string SendAnswer(string answer, int level = -1);
     }
 
@@ -51,14 +51,14 @@ namespace ENSolver
             }
             catch
             {
-                // если была ошибка в парсинге
                 id = "";
-                Log.Write("Не получилось определить id польвзоателя, хотя логон прошел успешно. ник=" + name);
+                Log.Write("Не получилось определить id пользователя, хотя логон прошел успешно. ник=" + name);
             }
         }
-        internal void StoreIntoRegistry()
+        public void StoreIntoRegistry()
         {
-            throw new NotImplementedException();
+            Registry reg = new Registry();
+            reg.SetUserInfo(this);
         }
     }
 
@@ -76,12 +76,13 @@ namespace ENSolver
     public class Engine : IEngine
     {
         // лог
-        private Log Log = new Log("Engine");
+        private static Log Log = new Log("Engine");
         // константы
         //private string url_game_en_cx = "http://game.en.cx/Login.aspx";
         private const string DefaultDomainForLogon = "game.en.cx";
-        // объект создан уже?
-        //private static bool isReady = false;
+        // готовность к получению уровней и отправке ответов
+        private static bool isReady = false;
+        // корректность учетных данных
         private static bool isLogged = false;
         // игра
         private static string domain;
@@ -91,6 +92,8 @@ namespace ENSolver
         // куки
         public static string cHead;
         public static CookieContainer cCont;
+        // блокировка операций с движком
+        private static object LockAction = new object();
 
         /// <summary>
         /// конструктор
@@ -130,31 +133,34 @@ namespace ENSolver
         /// <returns>страница с ответом</returns>
         private string DoLogon(UserInfo user, string domain2 = "")
         {
-            string domain = "";
-            if (domain2 == "") { domain = DefaultDomainForLogon; }
-            string formParams = string.Format("Login={0}&Password={1}", user.name, user.pass);
-            string cookieHeader = "";
-            CookieContainer cookies = new CookieContainer();
-            cCont = cookies;
-            string url1 = "http://" + domain + "/Login.aspx";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url1);
-            req.CookieContainer = cookies;
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.Method = "POST";
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(formParams);
-            req.ContentLength = bytes.Length;
-            using (Stream os = req.GetRequestStream()) { os.Write(bytes, 0, bytes.Length); }
             string pageSource = "";
-            try
+            lock (LockAction)
             {
-                HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-                cookieHeader = resp.Headers["Set-cookie"];
-                cHead = cookieHeader;
-                using (StreamReader sr = new StreamReader(resp.GetResponseStream())) { pageSource = sr.ReadToEnd(); }
-            }
-            catch
-            {
-                Log.Write("ERROR: не удалось получить ответ на авторизацию " + url1 + " / " + user.name + " / " + user.pass);
+                string domain = "";
+                if (domain2 == "") { domain = DefaultDomainForLogon; }
+                string formParams = string.Format("Login={0}&Password={1}", user.name, user.pass);
+                string cookieHeader = "";
+                CookieContainer cookies = new CookieContainer();
+                cCont = cookies;
+                string url1 = "http://" + domain + "/Login.aspx";
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url1);
+                req.CookieContainer = cookies;
+                req.ContentType = "application/x-www-form-urlencoded";
+                req.Method = "POST";
+                byte[] bytes = System.Text.Encoding.UTF8.GetBytes(formParams);
+                req.ContentLength = bytes.Length;
+                using (Stream os = req.GetRequestStream()) { os.Write(bytes, 0, bytes.Length); }
+                try
+                {
+                    HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                    cookieHeader = resp.Headers["Set-cookie"];
+                    cHead = cookieHeader;
+                    using (StreamReader sr = new StreamReader(resp.GetResponseStream())) { pageSource = sr.ReadToEnd(); }
+                }
+                catch
+                {
+                    Log.Write("ERROR: не удалось получить ответ на авторизацию " + url1 + " / " + user.name + " / " + user.pass);
+                }
             }
             return pageSource;
         }
@@ -216,9 +222,10 @@ namespace ENSolver
         /// <returns>страница, полученная в ответ</returns>
         public string SendAnswer(string answer, int level = -1)
         {
+            if (!isReady) { return ""; }
             // если на странице встретили "<form ID=\"formMain\" method=\"post\" action=\"/Login.aspx?return=%2fgameengines%2fencounter%2fplay%2f24889%2f%3flevel%3d11"
             // надо переавторизоваться и, если успешно - вернуть страницу
-
+            
             throw new NotImplementedException();
         }
 
@@ -229,6 +236,7 @@ namespace ENSolver
         /// <returns>текст страницы</returns>
         public string GetPage(string url)
         {
+            if (!isReady) { return ""; }
             string page = GetPageClean(url);
             if (isNeedLogon(page))
             {
@@ -249,27 +257,31 @@ namespace ENSolver
         private string GetPageClean(string url)
         {
             string page = "";
-            HttpWebRequest getRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            try
+            lock (LockAction)
             {
-                getRequest.CookieContainer = cCont;
-                WebResponse getResponse = getRequest.GetResponse();
-                using (StreamReader sr = new StreamReader(getResponse.GetResponseStream()))
+                HttpWebRequest getRequest = (HttpWebRequest)WebRequest.Create(url);
+                try
                 {
-                    page = sr.ReadToEnd();
+                    getRequest.CookieContainer = cCont;
+                    WebResponse getResponse = getRequest.GetResponse();
+                    using (StreamReader sr = new StreamReader(getResponse.GetResponseStream()))
+                    {
+                        page = sr.ReadToEnd();
+                    }
                 }
-            }
-            catch
-            {
-                Log.Write("ERROR: Не удалось прочитать страницу " + url);
-                page = "";
+                catch
+                {
+                    Log.Write("ERROR: Не удалось прочитать страницу " + url);
+                    page = "";
+                }
             }
             return page;
         }
 
         public string GetLevelPage(int level = -1)
         {
+            if (!isReady) { return ""; }
+
             // если на странице встретили "<form ID=\"formMain\" method=\"post\" action=\"/Login.aspx?return=%2fgameengines%2fencounter%2fplay%2f24889%2f%3flevel%3d11"
             // надо переавторизоваться и, если успешно - вернуть страницу
 
@@ -279,11 +291,8 @@ namespace ENSolver
         public void SetGame(GameInfo selected_game)
         {
             throw new NotImplementedException();
-        }
 
-        public string GetPage(int level = -1)
-        {
-            throw new NotImplementedException();
+            if (isLogged) { isReady = true; }
         }
     }
 }
