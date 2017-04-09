@@ -39,7 +39,7 @@ namespace ENSolver
                 isReady = true;
             }
         }
-        /*
+
         /// <summary>
         /// инит ветки реестра, создание папок при необходимости, сохранение UserInfo
         /// </summary>
@@ -52,7 +52,7 @@ namespace ENSolver
             }
             SetUserInfo(ui);
         }
-        */
+
         /// <summary>
         /// создаем при необходимости ветки реестра для учетки юзера
         /// </summary>
