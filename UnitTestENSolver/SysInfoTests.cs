@@ -8,7 +8,7 @@ using ENSolver;
 
 namespace UnitTestENSolver
 {
-    [TestClass]
+    //[TestClass]
     public class SysInfoTests
     {
         [TestMethod]
