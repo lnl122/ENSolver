@@ -1,12 +1,8 @@
-﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+﻿// Copyright © 2017 Antony S. Ovsyannikov aka lnl122
 // License: http://opensource.org/licenses/MIT
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ENSolver
 {
