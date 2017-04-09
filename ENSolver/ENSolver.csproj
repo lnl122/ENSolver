@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +55,7 @@
     <Compile Include="Registry.cs" />
     <Compile Include="SpellCheck.cs" />
     <Compile Include="SpellCheckDictionary.cs" />
+    <Compile Include="SysInfo.cs" />
     <Compile Include="Upload.cs" />
     <Compile Include="UploadMethods.cs" />
   </ItemGroup>

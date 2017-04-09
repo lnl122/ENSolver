@@ -55,6 +55,7 @@
     <Compile Include="GoogleTests.cs" />
     <Compile Include="RegistryTests.cs" />
     <Compile Include="SpellCheckDictionaryTests.cs" />
+    <Compile Include="SysInfoTests.cs" />
     <Compile Include="UploadTests.cs" />
     <Compile Include="LogTests.cs" />
     <Compile Include="ProgramTests.cs" />

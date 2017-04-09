@@ -11,39 +11,37 @@ namespace ENSolver
 
         static void Main(string[] args)
         {
-            //string file = Environment.CurrentDirectory + @"\..\files\buratino.jpg";
-            //Google goo = new Google();
-            //string res = goo.GetWordsByImgFile(file);
-
-            //string file = Environment.CurrentDirectory + @"http://videoediting.users.photofile.ru/photo/videoediting/3245357/large/69492452.png";
-            //Google goo = new Google();
-            //string res = goo.GetWordsByImgUrl(file);
-            //int idx1 = res.IndexOf("диплом");
-
-            
-            //UserInfo ui = (new Registry()).GetUserInfo();
-                                                         //new FormLogon(ui);
+            // выполняем проверки окружения
+            if (!SysInfo.Check())
+            {
+                System.Windows.Forms.MessageBox.Show("Не все необхдимые компоненты установлены на ПК.\r\nПроверьте лог-файл.");
+                return;
+            }
 
             /*
-            Log log = new ENSolver.Log("Main");
-            DateTime dt = DateTime.Now;
-            string folder = @"C:\Users\Антон\Source\Repos\Solver2\Solver2\Solver2\bin\Debug\Pics";
-            string[] dirs = System.IO.Directory.GetFiles(folder, "*.jpg");
-            Google goo = new Google();
-            foreach(string q in dirs)
-            {
-                string re = goo.GetWordsByImgFile(q);
-            }
-            log.Write("Main time for 163 pics: " + (Math.Floor((DateTime.Now - dt).TotalMilliseconds) / 1000).ToString());
-            */
+            // инициализируем наши собственные компоненты
+            Components.Init();
 
-            //Google goo = new Google();
-            //string res1 = goo.GetPageByImageUrl("http://www.obnovi.com/uploads/posts/2011-12/thumbs/1322828778_1.jpg"); // чебурашка
-            //string res2 = goo.GetPageByImageUrl("http://png2.ru/media/k2/items/cache/23da450944f0818162562a06dc761501_L.jpg"); // лосяш
-            //string res3 = goo.GetPageByImageUrl("http://foodandhealth.ru/wp-content/uploads/2016/10/kofe-e1475678835457-300x300.jpg"); // кофе
-            //string res4 = goo.GetPageByImageUrl("https://news.tj/sites/default/files/articles/231739/914204081.jpg"); // караул у мавзолея
-            //string res5 = goo.GetPageByImageUrl("http://rabotastudentu.ru/wp-content/uploads/2013/04/a50878f50680a3e082bfb3238f084bb1-220x300.jpg"); // диплом
-            //string res01 = goo.GetWordsByImgFile(@"..\files\buratino.jpg");
+            // создаем основную форму
+            spl.ChangeProgress(70, "Создаём форму приложения");
+            AppForm AF = new AppForm();
+
+            // создаём пользовательский таб
+            spl.ChangeProgress(70, "Создаём пользовательский уровень");
+            Level userlevel = new Level(D.Game, 0);
+            D.Lvl.Add(userlevel);
+            OneTab OT = new OneTab(D, userlevel);
+            D.OneTab.Add(OT);
+
+            // закрываем сплеш
+            spl.ChangeProgress(100, "Готово!");
+            System.Windows.Forms.Application.Run(D.F);
+
+            // закругляемся
+            Components.Close();
+            Log.Write("Выход из программы..");
+            Log.Close();
+            */
             int i = 0;
         }
 
