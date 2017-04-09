@@ -53,6 +53,7 @@
     <Compile Include="BooksTests.cs" />
     <Compile Include="EngineTests.cs" />
     <Compile Include="GoogleTests.cs" />
+    <Compile Include="RegistryTests.cs" />
     <Compile Include="SpellCheckDictionaryTests.cs" />
     <Compile Include="UploadTests.cs" />
     <Compile Include="LogTests.cs" />
