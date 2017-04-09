@@ -32,9 +32,11 @@ namespace ENSolver
         // на сколько миллисекунд засыпать при неудачном одном чтении
         private static int TimeToSleepMs = 2000;
         // UserAgent
-        private static string UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1";
+        //private static string UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1";
+        private static string UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36";
         // Изображение слишком велико либо его нельзя загрузить из-за низкой скорости интернет-подключения.
-        private static string LowSpeed = "Изображение слишком велико либо его нельзя загрузить из-за низкой скорости интернет-подключения.";
+        private static string LowSpeed1 = "Изображение слишком велико либо его нельзя загрузить из-за низкой скорости интернет-подключения.";
+        //private static string LowSpeed2 = "отключен из-за низкой скорости интернет-подключения.";
 
         private static string[,] tags_script = {
             { "<script>" , "<noscript>" , "<style>" , "//<![CDATA[", "<kno-share-button>"  },
@@ -126,6 +128,18 @@ namespace ENSolver
             wc.Headers.Add("User-Agent", UserAgent);
             wc.Headers.Add("Accept-Language", "ru-ru");
             wc.Headers.Add("Content-Language", "ru-ru");
+
+            ////wc.Headers.Add("Host", "www.google.ru");
+            ////wc.Headers.Add("Connection", "keep-alive");
+            //wc.Headers.Add("User-Agent", UserAgent);
+            //wc.Headers.Add("Upgrade-Insecure-Requests", "1");
+            ////wc.Headers.Add("X-Client-Data", "CI22yQEIo7bJAQjEtskBCPqcygEIqZ3KAQ==");
+            //wc.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+            //wc.Headers.Add("Accept-Encoding", "gzip, deflate, sdch, br");
+            //wc.Headers.Add("Accept-Language", "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4");
+            ////wc.Headers.Add("Cookie", "OGPC=89860096-1:; SID=OQRZ8u6TUiAbiNlbEQVyPhhL52B_ws35WZgMHu_rzQvuvvM4vqYDRf0iclsDiLLIeyMcWA.; HSID=AOLz67J9w3Mv-Ygep; SSID=AVYI68Y4HVB01stBz; APISID=BYxz5Vc3HxPmlB1d/APIlCFElGjEfOOpQy; SAPISID=FypqHQFwvb5cPXvp/AELyspmq4__h70l7Z; NID=100=JT7s2fvtu7AkFUJICA8IdhA7tCbsIsFOWYeehmX63RnGC8jVuRZ4nWTMxnw0RgiLBasC253gJehuFPi_pSEtVrGuKDvnVV4_-pzdZKLp91vucJIHiT8Y-6LFeo9eMH7y5-am5H-Dj_-hzqHRV98szsJ5yFTULlaNdkyZZFedoGWD8u1noIgAErmqau9wLa8_GpYbaWhK3vraPDq9t44yFJA");
+            //wc.Headers.Add("Content-Language", "ru-ru");
+
             string page = "";
             bool isNeedReadPage = true;
             int CountTry = 0;
@@ -134,9 +148,11 @@ namespace ENSolver
                 try
                 {
                     page = wc.DownloadString(gurl);
-                    if (page.IndexOf(LowSpeed) == -1)
+                    //if ((page.IndexOf(LowSpeed1) == -1) && (page.IndexOf(LowSpeed2) == -1))
+                    if (page.IndexOf(LowSpeed1) == -1)
                     {
-                        isNeedReadPage = false;
+                            isNeedReadPage = false;
+                        //page = "";
                     }
                     else
                     {

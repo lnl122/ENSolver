@@ -61,6 +61,50 @@ namespace UnitTestENSolver
             int idx1 = res.IndexOf("танго");
             Assert.AreNotEqual(-1, idx1);
         }
-        // goo.GetWordsByImgFile(@"..\files\buratino.jpg");
+        [TestMethod]
+        public void Google_TextByImage_url_1()
+        {
+            string file = @"http://www.obnovi.com/uploads/posts/2011-12/thumbs/1322828778_1.jpg";
+            Google goo = new Google();
+            string res = goo.GetWordsByImgUrl(file);
+            int idx1 = res.IndexOf("чебурашка");
+            Assert.AreNotEqual(-1, idx1);
+        }
+        [TestMethod]
+        public void Google_TextByImage_url_2()
+        {
+            string file = @"http://png2.ru/media/k2/items/cache/23da450944f0818162562a06dc761501_L.jpg";
+            Google goo = new Google();
+            string res = goo.GetWordsByImgUrl(file);
+            int idx1 = res.IndexOf("лосяш");
+            Assert.AreNotEqual(-1, idx1);
+        }
+        [TestMethod]
+        public void Google_TextByImage_url_3()
+        {
+            string file = @"http://foodandhealth.ru/wp-content/uploads/2016/10/kofe-e1475678835457-300x300.jpg";
+            Google goo = new Google();
+            string res = goo.GetWordsByImgUrl(file);
+            int idx1 = res.IndexOf("кофе");
+            Assert.AreNotEqual(-1, idx1);
+        }
+        [TestMethod]
+        public void Google_TextByImage_url_4()
+        {
+            string file = @"https://news.tj/sites/default/files/articles/231739/914204081.jpg";
+            Google goo = new Google();
+            string res = goo.GetWordsByImgUrl(file);
+            int idx1 = res.IndexOf("мавзолей");
+            Assert.AreNotEqual(-1, idx1);
+        }
+        [TestMethod]
+        public void Google_TextByImage_url_5()
+        {
+            string file = @"http://rabotastudentu.ru/wp-content/uploads/2013/04/a50878f50680a3e082bfb3238f084bb1-220x300.jpg";
+            Google goo = new Google();
+            string res = goo.GetWordsByImgUrl(file);
+            int idx1 = res.IndexOf("диплом");
+            Assert.AreNotEqual(-1, idx1);
+        }
     }
 }

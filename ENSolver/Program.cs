@@ -11,6 +11,19 @@ namespace ENSolver
 
         static void Main(string[] args)
         {
+            //string file = Environment.CurrentDirectory + @"\..\files\buratino.jpg";
+            //Google goo = new Google();
+            //string res = goo.GetWordsByImgFile(file);
+
+            //string file = Environment.CurrentDirectory + @"http://videoediting.users.photofile.ru/photo/videoediting/3245357/large/69492452.png";
+            //Google goo = new Google();
+            //string res = goo.GetWordsByImgUrl(file);
+            //int idx1 = res.IndexOf("диплом");
+
+            
+            //UserInfo ui = (new Registry()).GetUserInfo();
+                                                         //new FormLogon(ui);
+
             /*
             Log log = new ENSolver.Log("Main");
             DateTime dt = DateTime.Now;

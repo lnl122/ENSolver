@@ -1,6 +1,7 @@
 ﻿// Copyright © 2017 Antony S. Ovsyannikov aka lnl122
 // License: http://opensource.org/licenses/MIT
 
+using System;
 using Microsoft.Win32;
 
 namespace ENSolver
@@ -15,7 +16,7 @@ namespace ENSolver
         void SetUserInfo(UserInfo ui);
     }
 
-    public class Registry : IRegistry
+    public class Registry : IRegistry, System.IDisposable
     {
         //  лог
         private Log Log = new Log("Registry");
@@ -155,6 +156,14 @@ namespace ENSolver
             rk2.SetValue(Key_user, ui.name);
             rk2.SetValue(Key_pass, ui.pass);
             rk2.Close();
+        }
+
+        /// <summary>
+        /// деструктор
+        /// </summary>
+        public void Dispose()
+        {
+            isReady = false;
         }
     }
 }

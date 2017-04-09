@@ -100,6 +100,7 @@ namespace ENSolver
         /// </summary>
         public Engine()
         {
+            // не знаю что конструировать, все данные статические
 
         }
 
@@ -194,12 +195,31 @@ namespace ENSolver
         }
 
         /// <summary>
+        /// выбирает конкретную игру
+        /// </summary>
+        /// <param name="selected_game">выбранная игра</param>
+        public void SetGame(GameInfo selected_game)
+        {
+            // скопировать в объект данные игры
+            // создать строки урл для получения уровней
+            // 
+            throw new NotImplementedException("устанавливаем параметры игры, реальных гейминфо пока нет");
+
+            if (isLogged) { isReady = true; }
+        }
+
+        /// <summary>
         /// получает список игр, на которые подписан пользователь
         /// </summary>
         /// <returns>список структур с описанием игр</returns>
         public List<GameInfo> GetGameList()
         {
-            throw new NotImplementedException();
+            if (!isLogged) { return new List<GameInfo>(); }
+            // получить список игр пользователя
+            // выбрать неигранные, создать список
+            // для дебуга и себя - добавить игры с демо.ен.цх
+
+            throw new NotImplementedException("не можем создать список игр");
         }
 
         /// <summary>
@@ -210,7 +230,9 @@ namespace ENSolver
         /// <returns>структура данных об игре</returns>
         private GameInfo GetGameInfo(string domain, string gamenumber)
         {
-            throw new NotImplementedException();
+            // прочитать описание игры по ссылке, вычленить параметры игры, сложить в структуру
+
+            throw new NotImplementedException("получили страницу с описанием игры, но создать объект гейминфо не можем.");
         }
 
         /// <summary>
@@ -223,10 +245,10 @@ namespace ENSolver
         public string SendAnswer(string answer, int level = -1)
         {
             if (!isReady) { return ""; }
-            // если на странице встретили "<form ID=\"formMain\" method=\"post\" action=\"/Login.aspx?return=%2fgameengines%2fencounter%2fplay%2f24889%2f%3flevel%3d11"
-            // надо переавторизоваться и, если успешно - вернуть страницу
-            
-            throw new NotImplementedException();
+
+            // если в ответной странице isNeedLogon надо переавторизоваться и, если успешно - повторить отправку
+
+            throw new NotImplementedException("как бы выполнили отправку ответа, но вернуть страницу с результатом мы не можем.");
         }
 
         /// <summary>
@@ -236,7 +258,6 @@ namespace ENSolver
         /// <returns>текст страницы</returns>
         public string GetPage(string url)
         {
-            if (!isReady) { return ""; }
             string page = GetPageClean(url);
             if (isNeedLogon(page))
             {
@@ -278,6 +299,11 @@ namespace ENSolver
             return page;
         }
 
+        /// <summary>
+        /// получает страницу с уровнем
+        /// </summary>
+        /// <param name="level">уровень, если есть необходимость в его указании для штурма, или пусто для линейки</param>
+        /// <returns>текст страницы</returns>
         public string GetLevelPage(int level = -1)
         {
             if (!isReady) { return ""; }
@@ -285,14 +311,8 @@ namespace ENSolver
             // если на странице встретили "<form ID=\"formMain\" method=\"post\" action=\"/Login.aspx?return=%2fgameengines%2fencounter%2fplay%2f24889%2f%3flevel%3d11"
             // надо переавторизоваться и, если успешно - вернуть страницу
 
-            throw new NotImplementedException();
+            throw new NotImplementedException("запросили страничку с уровнем, но вернуть её мы неможем");
         }
 
-        public void SetGame(GameInfo selected_game)
-        {
-            throw new NotImplementedException();
-
-            if (isLogged) { isReady = true; }
-        }
     }
 }
