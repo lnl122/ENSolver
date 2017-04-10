@@ -5,6 +5,14 @@ using System;
 
 namespace ENSolver
 {
+    /// <summary>
+    /// единственный статический метод - проверяет окружение, записывает его в лог
+    /// </summary>
+    interface ISysInfo
+    {
+        bool Check();
+    }
+
     public class SysInfo
     {
         /// <summary>
