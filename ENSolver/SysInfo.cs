@@ -13,7 +13,7 @@ namespace ENSolver
         bool Check();
     }
 
-    public class SysInfo
+    public class SysInfo //: ISysInfo
     {
         /// <summary>
         /// проверяем наличие, настройки и также работу всех необходимых компонент, ведем лог
