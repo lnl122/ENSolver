@@ -28,8 +28,8 @@ namespace ENSolver
     public class UserInfo
     {
         private Log Log = new Log("UserInfo");
-        public string name { get; private set; }
-        public string pass { get; private set; }
+        public string name { get; set; }
+        public string pass { get; set; }
         public string id { get; set; }
         public UserInfo(string u, string p)
         {

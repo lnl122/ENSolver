@@ -10,6 +10,7 @@ namespace ENSolver
     /// </summary>
     interface ILog
     {
+        //void Log(string str);
         void Write(string str);
         void Store(string str);
         void Flush();
