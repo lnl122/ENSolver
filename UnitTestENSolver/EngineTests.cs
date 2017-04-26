@@ -8,7 +8,7 @@ using ENSolver;
 
 namespace UnitTestENSolver
 {
-    //[TestClass]
+    [TestClass]
     public class EngineTests
     {
         [TestMethod]
@@ -51,6 +51,40 @@ namespace UnitTestENSolver
             Engine en = new Engine();
             UserInfo ui = new UserInfo("полвторого", "ovs123");
             Assert.IsFalse(en.Logon(ui));
+        }
+        [TestMethod]
+        public void Engine_RemoveCharsTRN()
+        {
+            Engine en = new Engine();
+            string t1 = "\r\n\t\t\t\t#<span    >50</span>/<span >58132</span><br />\r\n\t\t\t\t<span >26.04.2017</span>\r\n\t\t\t";
+            Assert.AreEqual("# 50 / 58132 26.04.2017", en.RemoveCharsTRN(t1));
+        }
+        [TestMethod]
+        public void Engine_GetGameListById_1()
+        {
+            Engine en = new Engine();
+            string id = "1575641";
+            string page = en.GetPageGameListPageById(id);
+            List<GameInfo> gl = en.ParseGameListPage(page);
+            Assert.AreEqual(0, gl.Count);
+        }
+        [TestMethod]
+        public void Engine_GetGameListById_2()
+        {
+            Engine en = new Engine();
+            string id = "1539688";
+            string page = en.GetPageGameListPageById(id);
+            List<GameInfo> gl = en.ParseGameListPage(page);
+            Assert.AreEqual(0, gl.Count);
+        }
+        [TestMethod]
+        public void Engine_GetGameListById_3()
+        {
+            Engine en = new Engine();
+            string id = "1509025";
+            string page = en.GetPageGameListPageById(id);
+            List<GameInfo> gl = en.ParseGameListPage(page);
+            Assert.AreNotEqual(0, gl.Count);
         }
     }
 }

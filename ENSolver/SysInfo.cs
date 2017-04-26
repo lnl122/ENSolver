@@ -58,7 +58,7 @@ namespace ENSolver
             string re1 = "";
             try { re1 = wc1.DownloadString("http://image.google.com/"); } catch { Log.Write("ERROR: http://image.google.com/ не открывается"); return false; }
             try { re1 = wc1.DownloadString("http://game.en.cx/"); } catch { Log.Write("ERROR: http://game.en.cx/ не открывается"); return false; }
-            try { re1 = wc1.DownloadString("http://goldlit.ru/"); } catch { Log.Write("ERROR: http://goldlit.ru/ не открывается"); return false; }
+            //try { re1 = wc1.DownloadString("http://goldlit.ru/"); } catch { Log.Write("ERROR: http://goldlit.ru/ не открывается"); return false; }
             try { re1 = wc1.DownloadString("http://sociation.org/"); } catch { Log.Write("ERROR: http://sociation.org/ не открывается"); return false; }
             try { re1 = wc1.DownloadString("https://ru.wiktionary.org/"); } catch { Log.Write("ERROR: https://ru.wiktionary.org/ не открывается"); return false; }
             Log.Write("Все необходимые web-ресурсы открываются успешно");

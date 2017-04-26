@@ -17,7 +17,7 @@ namespace ENSolver
         bool Logon(UserInfo user, string domain);
         List<GameInfo> GetGameList();
         void SetGame(GameInfo selected_game);
-        string GetPage(string url);// походу он станет приватным
+        //string GetPage(string url); // походу он станет приватным
         string GetLevelPage(int level = -1);
         string SendAnswer(string answer, int level = -1);
     }
@@ -65,9 +65,14 @@ namespace ENSolver
         public string game_id;
         public string gameurl;
         public string name;
+        public string gamenumber;
+        public string gamedate;
+        public string gamestatus;
+        public bool enterpossible;
         public DateTime start;
         public DateTime end;
         public bool isStorm;
+        public string page;
     }
 
     public class Engine : IEngine
@@ -75,7 +80,6 @@ namespace ENSolver
         // лог
         private static Log Log = new Log("Engine");
         // константы
-        //private string url_game_en_cx = "http://game.en.cx/Login.aspx";
         private const string DefaultDomainForLogon = "game.en.cx";
         // готовность к получению уровней и отправке ответов
         private static bool isReady = false;
@@ -92,6 +96,14 @@ namespace ENSolver
         // блокировка операций с движком
         private static object LockAction = new object();
 
+        private static string[,] tags_script = {
+            { "<head>" , "<script"  , "<noscript"  , "<style"  , "//<![CDATA[" },
+            { "</head>", "</script>", "</noscript>", "</style>", "//]]>"       }
+        };
+        private static string[,] tags_table = {
+            { "<table"   , "border=\"" , "cellpadding=\"" , "cellspacing=\"" , "class=\"" , "style=\"" , "id=\"" , "nowrap=\"" , "align=\"" , "title=\"" , "onclick=\"" , "colspan=\"" , "width=\"" , "height=\"" },
+            { "</table>" , "\""  , "\"" , "\"" , "\"" , "\"" , "\"" , "\"" , "\"" , "\"" , "\"" , "\"" , "\"" , "\""  }
+        };
         /// <summary>
         /// конструктор
         /// </summary>
@@ -117,6 +129,7 @@ namespace ENSolver
                 isLogged = true;
                 userinfo = user;
                 domain = domain2;
+                if (domain2 == "") { domain = DefaultDomainForLogon; }
                 return true;
             }
             return false;
@@ -192,63 +205,6 @@ namespace ENSolver
         }
 
         /// <summary>
-        /// выбирает конкретную игру
-        /// </summary>
-        /// <param name="selected_game">выбранная игра</param>
-        public void SetGame(GameInfo selected_game)
-        {
-            // скопировать в объект данные игры
-            // создать строки урл для получения уровней
-            // 
-            throw new NotImplementedException("устанавливаем параметры игры, реальных гейминфо пока нет");
-
-            if (isLogged) { isReady = true; }
-        }
-
-        /// <summary>
-        /// получает список игр, на которые подписан пользователь
-        /// </summary>
-        /// <returns>список структур с описанием игр</returns>
-        public List<GameInfo> GetGameList()
-        {
-            if (!isLogged) { return new List<GameInfo>(); }
-            // получить список игр пользователя
-            // выбрать неигранные, создать список
-            // для дебуга и себя - добавить игры с демо.ен.цх
-
-            throw new NotImplementedException("не можем создать список игр");
-        }
-
-        /// <summary>
-        /// получает информацию об одной игре
-        /// </summary>
-        /// <param name="domain">домен игры</param>
-        /// <param name="gamenumber">номер игры</param>
-        /// <returns>структура данных об игре</returns>
-        private GameInfo GetGameInfo(string domain, string gamenumber)
-        {
-            // прочитать описание игры по ссылке, вычленить параметры игры, сложить в структуру
-
-            throw new NotImplementedException("получили страницу с описанием игры, но создать объект гейминфо не можем.");
-        }
-
-        /// <summary>
-        /// пробует отправить ответ в игровой движек,
-        /// при запросе авторизации - выполняет её
-        /// </summary>
-        /// <param name="answer">ответ</param>
-        /// <param name="level">номер уровня для штурма, или пусто для линейки</param>
-        /// <returns>страница, полученная в ответ</returns>
-        public string SendAnswer(string answer, int level = -1)
-        {
-            if (!isReady) { return ""; }
-
-            // если в ответной странице isNeedLogon надо переавторизоваться и, если успешно - повторить отправку
-
-            throw new NotImplementedException("как бы выполнили отправку ответа, но вернуть страницу с результатом мы не можем.");
-        }
-
-        /// <summary>
         /// получает страницу, учитывая сохраненные куки
         /// </summary>
         /// <param name="url">урл</param>
@@ -294,6 +250,140 @@ namespace ENSolver
                 }
             }
             return page;
+        }
+
+        /// <summary>
+        /// выбирает конкретную игру
+        /// </summary>
+        /// <param name="selected_game">выбранная игра</param>
+        public void SetGame(GameInfo selected_game)
+        {
+            // скопировать в объект данные игры
+            // создать строки урл для получения уровней
+            // 
+            throw new NotImplementedException("устанавливаем параметры игры, реальных гейминфо пока нет");
+
+            if (isLogged) { isReady = true; }
+        }
+
+        /// <summary>
+        /// получает список игр, на которые подписан пользователь
+        /// </summary>
+        /// <returns>список структур с описанием игр</returns>
+        public List<GameInfo> GetGameList()
+        {
+            if (!isLogged) { return new List<GameInfo>(); }
+            // получить список игр пользователя
+            string page = GetPageGameListPageById(userinfo.id);
+            List<GameInfo> gl = ParseGameListPage(page);
+            int iii = 0;
+            // найти МШ, если они есть
+            // выбрать неигранные, создать список
+            // для дебуга и себя - добавить игры с демо.ен.цх
+
+            throw new NotImplementedException("не можем создать список игр");
+        }
+
+        /// <summary>
+        /// парсинг страницы со списком игр
+        /// </summary>
+        /// <param name="page">входящая страница</param>
+        /// <returns>GameList с краткой информацией о неигранных играх</returns>
+        public List<GameInfo> ParseGameListPage(string page)
+        {
+            List<GameInfo> gl = new List<GameInfo>();
+            int idx1 = page.IndexOf("<div ID=\"content\"");
+            if (idx1 == -1) { return gl; }
+            string p = page.Substring(idx1);
+            idx1 = p.IndexOf("</form>");
+            if (idx1 == -1) { return gl; }
+            p = p.Substring(0, idx1);
+            idx1 = p.IndexOf("<table");
+            if (idx1 == -1) { return gl; }
+            p = p.Substring(idx1 + 6);
+            p = ParsePage.ParseTags(p, tags_table);
+            string[] ar = System.Text.RegularExpressions.Regex.Split(p, "</tr>");
+            for(int i = 0; i < ar.Length; i++)
+            {
+                string[] ar2 = System.Text.RegularExpressions.Regex.Split(ar[i], "</td>");
+                if (ar2.Length != 5) { continue; }
+                string number_date = RemoveCharsTRN(ar2[1]);
+                if (number_date[0] != '#') { continue; }
+                string status = RemoveCharsTRN(ar2[2]);
+                if (status.Contains("Место")) { continue; }
+                if (status.Contains("Не дошли до финиша")) { continue; }
+                string name_link = RemoveCharsTRN(ar2[3]);
+                GameInfo gi = new GameInfo();
+                string[] ar3 = number_date.Split(' ');
+                gi.gamenumber = ar3[1] + "/" + ar3[3];
+                gi.gamedate = ar3[4];
+                gi.gamestatus = status;
+                string link = name_link.Substring(name_link.IndexOf("href=\"") + 6);
+                gi.gameurl = link.Substring(0, link.IndexOf("\""));
+                string name = name_link.Substring(name_link.IndexOf(">") + 1);
+                gi.name = name.Substring(0, name.IndexOf("</a>"));
+                string domain = gi.gameurl.Replace("http://","");
+                gi.domain = domain.Substring(0, domain.IndexOf("/"));
+                gi.game_id = gi.gameurl.Substring(gi.gameurl.IndexOf("gid=") + 4).Replace("\\","");
+                gl.Add(gi);
+            };
+            return gl;
+        }
+
+        /// <summary>
+        /// вырезает лишние теги \r \n \t span td br
+        /// </summary>
+        /// <param name="str">строка</param>
+        /// <returns>обрезанная строка</returns>
+        public string RemoveCharsTRN(string str)
+        {
+            string res = str.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            res = res.Replace("<td >", " ").Replace("<td>", " ").Replace("<br />", " ").Replace("<br/>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            res = res.Replace("<span >", " ").Replace("<span>", " ").Replace("</span>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " "); ;
+            res = res.Trim();
+            return res;
+        }
+
+        /// <summary>
+        /// получает страницу со списком МШ по ид игрока
+        /// </summary>
+        /// <param name="userid2">ид игрока</param>
+        /// <returns>текст страницы после базового парсинга ответа</returns>
+        public string GetPageGameListPageById(string userid2)
+        {
+            string url = "http://" + domain + "/UserDetails.aspx?tab=1&zone=1&uid=" + userid2;
+            string page = GetPageClean(url);
+            page = ParsePage.ParseTags(page, tags_script);
+            return page;
+        }
+
+        /// <summary>
+        /// получает информацию об одной игре
+        /// </summary>
+        /// <param name="domain">домен игры</param>
+        /// <param name="gamenumber">номер игры</param>
+        /// <returns>структура данных об игре</returns>
+        private GameInfo GetGameInfo(string domain, string gamenumber)
+        {
+            // прочитать описание игры по ссылке, вычленить параметры игры, сложить в структуру
+
+            throw new NotImplementedException("получили страницу с описанием игры, но создать объект гейминфо не можем.");
+        }
+
+        /// <summary>
+        /// пробует отправить ответ в игровой движек,
+        /// при запросе авторизации - выполняет её
+        /// </summary>
+        /// <param name="answer">ответ</param>
+        /// <param name="level">номер уровня для штурма, или пусто для линейки</param>
+        /// <returns>страница, полученная в ответ</returns>
+        public string SendAnswer(string answer, int level = -1)
+        {
+            if (!isReady) { return ""; }
+
+            // если в ответной странице isNeedLogon надо переавторизоваться и, если успешно - повторить отправку
+
+            throw new NotImplementedException("как бы выполнили отправку ответа, но вернуть страницу с результатом мы не можем.");
         }
 
         /// <summary>
